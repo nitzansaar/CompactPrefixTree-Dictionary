@@ -102,6 +102,13 @@ public class CompactPrefixTree implements Dictionary {
 
     // ---------- Private helper methods ---------------
 
+    private String getCommonPrefix(String s1, String s2) {
+        int i = 0;
+        while (s1.charAt(i) == s2.charAt(i))
+            i++;
+        return s1.substring(0, i);
+    }
+
     /**
      *  A private add method that adds a given string to the tree
      * @param s the string to add
@@ -110,7 +117,40 @@ public class CompactPrefixTree implements Dictionary {
      * @return a reference to the root of the tree that contains s
      */
     private Node add(String s, Node node) {
-        // FILL IN CODE
+        // base case 1 tree is empty
+        if (node == null) {
+            Node newNode = new Node();
+            newNode.prefix = s;
+            newNode.isWord = true;
+            return newNode;
+        }
+        // base case 2
+        if (node.prefix.equals(s) && !node.isWord) {
+            node.isWord = true;
+            return node;
+        }
+        // base case 3 -> word already in tree
+        if (node.prefix.equals(s) /*&& node.isWord*/) {
+            return node;
+        }
+        // base case 4 ->
+        String commonPrefix = getCommonPrefix(node.prefix, s);
+        String suffix = node.prefix.substring(commonPrefix.length());
+        String suffixWord = s.substring(commonPrefix.length());
+        Node newNode = new Node();
+        newNode.prefix = commonPrefix;
+        Node suffixNode = new Node();
+        suffixNode.prefix = suffix;
+        suffixNode.children = node.children;
+        suffixNode.isWord = node.isWord;
+
+
+
+
+
+
+
+
 
 
         return null; // don't forget to change it
