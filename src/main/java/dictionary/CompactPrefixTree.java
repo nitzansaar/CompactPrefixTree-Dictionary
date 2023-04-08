@@ -218,9 +218,8 @@ public class CompactPrefixTree implements Dictionary {
      * @return true if the prefix is in the dictionary, false otherwise
      */
     private boolean checkPrefix(String prefix, Node node) {
-        if (node == null) {
+        if (node == null)
             return false;
-        }
         String commonPrefix = getCommonPrefix(prefix, node.prefix);
         if (commonPrefix.equals(node.prefix)) {
             if (prefix.length() > commonPrefix.length()) {
@@ -229,8 +228,8 @@ public class CompactPrefixTree implements Dictionary {
                 return checkPrefix(leftoverChars, node.children[index]);
             } else
                 return prefix.length() == commonPrefix.length(); // prefix exists in the tre
-        }
-        return false;
+        } else
+            return commonPrefix.equals(prefix);
     }
 
 
