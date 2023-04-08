@@ -29,7 +29,6 @@ public class CompactPrefixTree implements Dictionary {
      * @param filename the name of the file with words
      */
     public CompactPrefixTree(String filename) {
-        // FILL IN CODE:
         // Read each word from the file, add it to the tree
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String word;
@@ -195,23 +194,45 @@ public class CompactPrefixTree implements Dictionary {
      * @return true if the prefix is in the dictionary, false otherwise
      */
     private boolean check(String s, Node node) {
-        // FILL IN CODE
-
-        return false; // don't forget to change it
+        if (node == null) {
+            return false; // not in tree
+        }
+        String commonPrefix = getCommonPrefix(s, node.prefix);
+        if (commonPrefix.equals(node.prefix)) {
+            if (s.length() > commonPrefix.length()) {
+                String leftoverChars = s.substring(commonPrefix.length());
+                int index = leftoverChars.charAt(0) - 'a';
+                return check(leftoverChars, node.children[index]);
+            } else if (s.length() == commonPrefix.length()) {
+                return node.isWord;
+            }
+        }
+        return false;
     }
 
     /**
      * A private recursive method to check whether a given prefix is in the tree
      *
      * @param prefix the prefix
-     * @param node   the root of the tree
+     * @param node the root of the tree
      * @return true if the prefix is in the dictionary, false otherwise
      */
     private boolean checkPrefix(String prefix, Node node) {
-        // FILL IN CODE
-
-        return false; // don't forget to change it
+        if (node == null) {
+            return false;
+        }
+        String commonPrefix = getCommonPrefix(prefix, node.prefix);
+        if (commonPrefix.equals(node.prefix)) {
+            if (prefix.length() > commonPrefix.length()) {
+                String leftoverChars = prefix.substring(commonPrefix.length());
+                int index = leftoverChars.charAt(0) - 'a';
+                return checkPrefix(leftoverChars, node.children[index]);
+            } else
+                return prefix.length() == commonPrefix.length(); // prefix exists in the tre
+        }
+        return false;
     }
+
 
     // You might want to create a private recursive helper method for toString
     // that takes the node and the number of indentations, and returns the tree  (printed with indentations) in a string.
