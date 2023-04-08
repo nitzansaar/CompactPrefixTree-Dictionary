@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CompactPrefixTree class, implements Dictionary ADT and
@@ -136,16 +138,20 @@ public class CompactPrefixTree implements Dictionary {
      */
 
     public String[] suggest(String word, int numSuggestions) {
-        // FILL IN CODE
-        // Note: you need to create a private suggest method in this class
-        // (like we did for methods add, check, checkPrefix)
-
-
-        return null; // don't forget to change it
+        List<String> suggestions = new ArrayList<>();
+        if (check(word)) {
+            suggestions.add(word);
+            return suggestions.toArray(new String[0]);
+        }
+        return suggestions.toArray(new String[0]);
     }
+
 
     // ---------- Private helper methods ---------------
 
+    private void suggestHelper() {
+
+    }
     private String getCommonPrefix(String s1, String s2) {
         int minLength = Math.min(s1.length(), s2.length());
         int i = 0;
