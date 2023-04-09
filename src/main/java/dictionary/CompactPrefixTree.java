@@ -82,25 +82,22 @@ public class CompactPrefixTree implements Dictionary {
      */
     public String toString() {
         // FILL IN CODE
-        StringBuilder builder = new StringBuilder();
-        toString(root, builder, 0);
-        return builder.toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        toString(root, stringBuilder, 0);
+        return stringBuilder.toString();
     }
 
-    private void toString(Node node, StringBuilder builder, int level) {
-        if (node == null) {
+    private void toString(Node node, StringBuilder stringBuilder, int level) {
+        if (node == null)
             return;
-        }
-        builder.append(" ".repeat(Math.max(0, level)));
-        builder.append(node.prefix);
-        if (node.isWord) {
-            builder.append('*');
-        }
-        builder.append('\n');
+        stringBuilder.append(" ".repeat(Math.max(0, level)));
+        stringBuilder.append(node.prefix);
+        if (node.isWord)
+            stringBuilder.append('*');
+        stringBuilder.append('\n');
         for (Node child : node.children) {
-            if (child != null) {
-                toString(child, builder, level + 1); // recursive call
-            }
+            if (child != null)
+                toString(child, stringBuilder, level + 1); // recursive call
         }
     }
 
@@ -139,18 +136,38 @@ public class CompactPrefixTree implements Dictionary {
 
     public String[] suggest(String word, int numSuggestions) {
         List<String> suggestions = new ArrayList<>();
-        if (check(word)) {
+        if (check(word)) { // if the word exists return just that word
             suggestions.add(word);
             return suggestions.toArray(new String[0]);
+        }
+        int i = word.length();
+        while (i >= 1) {
+            if (suggestions.size() < numSuggestions) {
+                String prefix = word.substring(0, i);
+                suggestHelper(prefix, root, "", suggestions, numSuggestions);
+            }
+            i--;
         }
         return suggestions.toArray(new String[0]);
     }
 
-
     // ---------- Private helper methods ---------------
 
-    private void suggestHelper() {
-
+    private void suggestHelper(String target, Node node, String prefix, List<String> suggestions, int numSuggestions) {
+        // if the node is null or if we have enough suggestions, stop the recursion.
+        if (node == null || suggestions.size() >= numSuggestions)
+            return;
+        if (node.isWord) {
+            String word = prefix + node.prefix;
+            if (word.startsWith(target) && !word.equals(target) && check(word)) { // if starts with target prefix, add to suggestions
+                suggestions.add(word);
+                if (suggestions.size() == numSuggestions)
+                    return;
+            }
+        }
+        for (int i = 0; i < node.children.length; i++) { // go through the children of the current node and make recursively call
+            suggestHelper(target, node.children[i], prefix + node.prefix, suggestions, numSuggestions);
+        }
     }
     private String getCommonPrefix(String s1, String s2) {
         int minLength = Math.min(s1.length(), s2.length());
@@ -200,9 +217,8 @@ public class CompactPrefixTree implements Dictionary {
      * @return true if the prefix is in the dictionary, false otherwise
      */
     private boolean check(String s, Node node) {
-        if (node == null) {
+        if (node == null)
             return false; // not in tree
-        }
         String commonPrefix = getCommonPrefix(s, node.prefix);
         if (commonPrefix.equals(node.prefix)) {
             if (s.length() > commonPrefix.length()) {
