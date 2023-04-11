@@ -141,7 +141,7 @@ public class CompactPrefixTree implements Dictionary {
             return suggestions.toArray(new String[0]);
         }
         int i = word.length();
-        while (i >= 1) {
+        while (i >= 1) { // call suggestHelper on every possible prefix of word
             if (suggestions.size() < numSuggestions) {
                 String prefix = word.substring(0, i);
                 suggestHelper(prefix, root, "", suggestions, numSuggestions);
@@ -159,13 +159,13 @@ public class CompactPrefixTree implements Dictionary {
             return;
         if (node.isWord) {
             String word = prefix + node.prefix;
-            if (word.startsWith(target) && !word.equals(target) && check(word)) { // if starts with target prefix, add to suggestions
+            if (word.startsWith(target) && !word.equals(target) && check(word)) {
                 suggestions.add(word);
-                if (suggestions.size() == numSuggestions)
+                if (suggestions.size() == numSuggestions) // we have enough suggestions
                     return;
             }
         }
-        for (int i = 0; i < node.children.length; i++) { // go through the children of the current node and make recursively call
+        for (int i = 0; i < node.children.length; i++) { // DFS & go through the children of the current node and make recursive call
             suggestHelper(target, node.children[i], prefix + node.prefix, suggestions, numSuggestions);
         }
     }
