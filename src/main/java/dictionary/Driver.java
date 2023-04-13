@@ -5,22 +5,22 @@ package dictionary;
  */
 public class Driver {
     public static void main(String[] args) {
-            Dictionary dict = new CompactPrefixTree();
-            dict.add("cat");
-            dict.add("cart");
-            dict.add("carts");
-            dict.add("case");
-            dict.add("doge");
-            dict.add("doghouse");
-            dict.add("wrist");
-            dict.add("wrath");
-            dict.add("wristle");
-            System.out.println(dict);
-            System.out.println("----------------");
-            testGetCommonPrefix();
-            testToString();
-            testCheck();
-            testCheckPrefix();
+        Dictionary dict = new CompactPrefixTree();
+        dict.add("cat");
+        dict.add("cart");
+        dict.add("carts");
+        dict.add("case");
+        dict.add("doge");
+        dict.add("doghouse");
+        dict.add("wrist");
+        dict.add("wrath");
+        dict.add("wristle");
+        System.out.println(dict);
+        System.out.println("----------------");
+        testGetCommonPrefix();
+        testToString();
+        testCheck();
+        testCheckPrefix();
         testSuggest();
     }
 
