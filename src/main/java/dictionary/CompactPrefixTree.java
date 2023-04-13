@@ -81,7 +81,6 @@ public class CompactPrefixTree implements Dictionary {
      * then there are children of the node at a higher indentation level.
      */
     public String toString() {
-        // FILL IN CODE
         StringBuilder stringBuilder = new StringBuilder();
         toString(root, stringBuilder, 0);
         return stringBuilder.toString();
@@ -108,7 +107,6 @@ public class CompactPrefixTree implements Dictionary {
      * @param filename the name of the file where to output the tree
      */
     public void printTree(String filename) {
-        // FILL IN CODE
         // Uses toString() method; outputs info to a file
         try (FileWriter fileWriter = new FileWriter(filename)) {
             String tree = toString();
@@ -141,8 +139,8 @@ public class CompactPrefixTree implements Dictionary {
             return suggestions.toArray(new String[0]);
         }
         int i = word.length();
-        while (i >= 1) { // call suggestHelper on every possible prefix of word
-            if (suggestions.size() < numSuggestions) {
+        while (i >= 1) { // call suggestHelper on every substring of word
+            if (suggestions.size() < numSuggestions) { // if we still need to add suggestions
                 String prefix = word.substring(0, i);
                 suggestHelper(prefix, root, "", suggestions, numSuggestions);
             }
@@ -154,21 +152,18 @@ public class CompactPrefixTree implements Dictionary {
     // ---------- Private helper methods ---------------
 
     private void suggestHelper(String target, Node node, String prefix, List<String> suggestions, int numSuggestions) {
-        // if the node is null or if we have enough suggestions, stop the recursion.
-        if (node == null || suggestions.size() >= numSuggestions)
+        if (node == null || suggestions.size() >= numSuggestions) // if the node is null or if we have enough suggestions, stop the recursion.
             return;
         if (node.isWord) {
             String word = prefix + node.prefix;
-            if (word.startsWith(target) && !word.equals(target) && check(word)) {
+            if (word.startsWith(target) && check(word)) // only want to add similar words
                 suggestions.add(word);
-                if (suggestions.size() == numSuggestions) // we have enough suggestions
-                    return;
-            }
         }
-        for (int i = 0; i < node.children.length; i++) { // DFS & go through the children of the current node and make recursive call
+        for (int i = 0; i < node.children.length; i++) { // DFS & recursively go through the children of the current node
             suggestHelper(target, node.children[i], prefix + node.prefix, suggestions, numSuggestions);
         }
     }
+
     private String getCommonPrefix(String s1, String s2) {
         int minLength = Math.min(s1.length(), s2.length());
         int i = 0;
@@ -236,7 +231,7 @@ public class CompactPrefixTree implements Dictionary {
      * A private recursive method to check whether a given prefix is in the tree
      *
      * @param prefix the prefix
-     * @param node the root of the tree
+     * @param node   the root of the tree
      * @return true if the prefix is in the dictionary, false otherwise
      */
     private boolean checkPrefix(String prefix, Node node) {

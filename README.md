@@ -4,3 +4,6 @@ look for words that share the same common prefix as the target word and graduall
 search space to find more suggestions. For each prefix, the algorithm calls ‘suggestHelper’ which does a depth-first-search of the tree. The ‘suggestHelper’ 
 method goes as deep as possible into the tree branches and visits all nodes that share the same prefix as the target. If it reaches the end of a branch or did 
 not find enough suggestions, it will backtrack to the previous node and search other branches. This process repeats until there are enough suggestions.
+Base case: Current node is null / we have enough suggestions
+Recursive case: If the current node's prefix forms a valid word and shares the target prefix, we add that word to suggestions
+Recursive steps: 1) Iterate through the children of the current node. 2) For each child, make a recursive call to suggestHelper with the updated prefix
